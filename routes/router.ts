@@ -14,6 +14,13 @@ router.get('/mensajes',(req: Request, res: Response) =>
 router.post('/mensajes',(req: Request, res: Response) => {
     const cuerpo = req.body.cuerpo
     const de = req.body.de
+    const payload = { 
+        cuerpo,
+        de 
+    }
+
+    const server = Server.instance;
+    server.io.emit('mensaje-nuevo', payload)
     
     res.json(
         {
@@ -33,7 +40,7 @@ router.post('/mensajes/:para',(req: Request, res: Response) => {
       cuerpo
     }
     const server = Server.instance;
-   server.io.in(para).emit('mensaje-privado')
+   server.io.in(para).emit('mensaje-privado', payload)
     res.json(
         {
             ok:true,
