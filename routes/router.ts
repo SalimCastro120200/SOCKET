@@ -1,6 +1,9 @@
-import { Router, Request, Response } from "express";
+import { Router, Request, Response, response } from "express";
+import { Socket } from "socket.io/dist/socket";
 import Server from '../classes/server';
 const router = Router();
+
+const sockets: any = null;
 
 router.get('/mensajes',(req: Request, res: Response) =>
 {
@@ -50,4 +53,17 @@ router.post('/mensajes/:para',(req: Request, res: Response) => {
         }
     )
 })
+
+// Servicio para obtener todos los ID's de los Usuarios
+
+router.get('/usuarios',(req: Request, res: Response) =>{
+    const server = Server.instance;
+
+    server.io.fetchSockets().then((sockets) => {
+        const clients: Object[] = []
+        sockets.forEach(socket => clients.push(socket.id));
+        res.json({ ok: true, clients, });}).catch(error => res.json({ ok:true, error, }));
+    });
+
+
 export default router;

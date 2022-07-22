@@ -21,6 +21,7 @@ export default class Server
             {
                 cors:{origin:true, credentials:true}
             } );
+        // this.io = new socketIO.Server( this.httpServer );
 
         this.escucharSockets();
     }
